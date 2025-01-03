@@ -27,4 +27,9 @@ public class ProAppointmentController {
     public List<Appointment> getAppointments() {
         return proAppointmentService.findAll();
     }
+    @ApiOperation(value = "create en appointment")
+    @PostMapping
+    public Appointment createAppointment(@RequestBody AppointmentDTO appointment) {
+        return proAppointmentService.save(appointment);
+    }
 }

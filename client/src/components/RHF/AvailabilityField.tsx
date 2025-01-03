@@ -58,6 +58,7 @@ const AvailabilityField = (props: Props) => {
                           className={clsx(isSelected && 'selected', 'btn')}
                           disabled={loading}
                           key={id}
+                          type="button"
                           onClick={() => {
                             onChange(isSelected ? '' : id);
                           }}
@@ -66,8 +67,8 @@ const AvailabilityField = (props: Props) => {
                             color={!isSelected ? 'textPrimary' : 'inherit'}
                           >
                             {formatTimeRange({
-                              from: startDate,
-                              to: endDate,
+                              from: new Date(startDate),
+                              to: new Date(endDate),
                             })}
                           </Typography>
                         </button>

@@ -7,11 +7,15 @@ import com.maiia.pro.repository.PatientRepository;
 import com.maiia.pro.repository.PractitionerRepository;
 import com.maiia.pro.repository.TimeSlotRepository;
 import com.maiia.pro.service.ProAvailabilityService;
+import com.maiia.pro.service.ProPatientService;
+import com.maiia.pro.service.ProPractitionerService;
+import com.maiia.pro.service.ProTimeSlotService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@Profile("!test")
 public class CommandLineStartupRunner implements CommandLineRunner {
 
     private final Logger log = LoggerFactory.getLogger(CommandLineStartupRunner.class);
@@ -29,9 +34,14 @@ public class CommandLineStartupRunner implements CommandLineRunner {
     private PractitionerRepository practitionerRepository;
     @Autowired
     private TimeSlotRepository timeSlotRepository;
-
     @Autowired
     private ProAvailabilityService proAvailabilityService;
+    @Autowired
+    private ProPractitionerService proPractitionerService;
+    @Autowired
+    private ProTimeSlotService proTimeSlotService;
+    @Autowired
+    private ProPatientService proPatientService;
 
     @Override
     public void run(String... args) {
@@ -39,7 +49,7 @@ public class CommandLineStartupRunner implements CommandLineRunner {
         for (int i = 1; i <= 5; i++) {
             String speciality ="orthodontist";
             //create patient
-            patientRepository.save(Patient.builder().firstName("patient_" + i).lastName("maiia").build());
+            proPatientService.save(Patient.builder().firstName("patient_" + i).lastName("maiia").build());
             //create practitioner
             Practitioner practitioner = practitionerRepository.save(Practitioner.builder().firstName("practitioner" + i).lastName("maiia").build());
             //create timeSlots for practitioner
@@ -68,8 +78,8 @@ public class CommandLineStartupRunner implements CommandLineRunner {
                 speciality="dentist";
             }
             practitioner.setSpeciality(speciality);
-            practitioner = practitionerRepository.save(practitioner);
-            timeSlotRepository.saveAll(timeSlotList);
+            practitioner = proPractitionerService.save(practitioner);
+            proTimeSlotService.saveAll(timeSlotList);
 
             proAvailabilityService.generateAvailabilities(practitioner.getId());
         }

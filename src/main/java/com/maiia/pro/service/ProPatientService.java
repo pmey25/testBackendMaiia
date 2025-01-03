@@ -4,6 +4,7 @@ import com.maiia.pro.entity.Patient;
 import com.maiia.pro.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,11 +13,12 @@ public class ProPatientService {
     @Autowired
     private PatientRepository patientRepository;
 
-    public Patient find(String patientId) {
-        return patientRepository.findById(patientId).orElseThrow();
-    }
-
     public List<Patient> findAll() {
         return patientRepository.findAll();
+    }
+
+    @Transactional
+    public void save(Patient patient) {
+        patientRepository.save(patient);
     }
 }
