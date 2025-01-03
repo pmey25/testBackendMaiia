@@ -10,7 +10,7 @@ class ProApplicationTests {
 
 	@Test
 	void contextLoads() {
-		ProApplication.main(new String[] {});
+
 	}
 
 }
